@@ -7,7 +7,7 @@ const SLIDES = [
     id: 'partners',
     title: 'Growing with our partners',
     description: 'We work with the best restaurants and stores. We support our partners every step of the way and empower their growth. Ready to take your business to the next level?',
-    image: '/assests/fp-about-2.webp',
+    image: '/public/assests/fp-about-2.webp',
     bg: 'bg-white'
   },
   {

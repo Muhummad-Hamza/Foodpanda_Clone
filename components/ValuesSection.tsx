@@ -7,7 +7,7 @@ const VALUES_DATA = [
     label: 'prioritise, decide, deliver',
     title: 'prioritise, decide, deliver',
     description: 'We are disciplined about focusing on what matters. When we face uncertainty, we put considered thought behind our actions and continue to deliver because it is only through execution that we learn, iterate, and improve.',
-    image: 'public/assests/values_1.webp'
+    image: '/public/assests/values_1.webp'
   },
   {
     id: 'customer',

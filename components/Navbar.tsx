@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { Search, Globe, ChevronDown } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, Globe, ChevronDown, Menu, X } from 'lucide-react';
 import { NAV_ITEMS, BRAND_COLOR, Logo } from '../constants';
 
 interface NavbarProps {
@@ -25,6 +25,13 @@ const LOCATIONS = [
 const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
   const [isLocationOpen, setIsLocationOpen] = useState(false);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    // Prevent background scroll when mobile menu is open
+    document.body.style.overflow = isMenuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isMenuOpen]);
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-white z-50 h-20 border-b border-gray-100 px-4 md:px-8">
@@ -108,10 +115,54 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
         </div>
 
         <div className="lg:hidden flex items-center gap-4">
+            <button
+              aria-label="Open menu"
+              onClick={() => setIsMenuOpen(true)}
+              className="p-2 rounded-md bg-white border border-gray-100 shadow-sm hover:opacity-90"
+            >
+              <Menu className="w-6 h-6 text-gray-900" />
+            </button>
             <button className="bg-[#ff2b85] text-white px-4 py-2 rounded-xl text-xs font-black">
               Location
             </button>
             <Search className="w-6 h-6 text-gray-900" />
+        </div>
+
+        {/* Mobile Drawer */}
+        <div className={`fixed inset-0 z-60 transition-transform duration-300 ${isMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
+          <div className={`absolute inset-0 bg-black/40 transition-opacity ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`} onClick={() => setIsMenuOpen(false)} />
+
+          <div className={`absolute top-0 right-0 w-4/5 max-w-xs h-full bg-white shadow-2xl transform transition-transform ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+            <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
+              <button onClick={() => { onNavigate('Home'); setIsMenuOpen(false); }} className="hover:opacity-80 transition-opacity">
+                <Logo />
+              </button>
+              <button aria-label="Close menu" onClick={() => setIsMenuOpen(false)} className="p-2 rounded-md hover:bg-gray-100">
+                <X className="w-6 h-6 text-gray-900" />
+              </button>
+            </div>
+
+            <nav className="px-4 py-6 space-y-4">
+              {NAV_ITEMS.map((item) => (
+                <button
+                  key={item.label}
+                  onClick={() => { onNavigate(item.label); setIsMenuOpen(false); }}
+                  className="w-full text-left text-lg font-bold py-3 hover:text-[#ff2b85] transition-colors"
+                >
+                  {item.label}
+                </button>
+              ))}
+
+              <div className="pt-4 border-t border-gray-100">
+                <button className="w-full flex items-center gap-3 px-3 py-3 rounded-md hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>
+                  <Globe className="w-5 h-5 text-gray-800" />
+                  <span className="font-bold">EN</span>
+                </button>
+
+                <button className="w-full mt-3 bg-[#ff2b85] text-white px-4 py-3 rounded-[20px] font-black">Choose location</button>
+              </div>
+            </nav>
+          </div>
         </div>
       </div>
       
